@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PresupuestApp · Erben Bauen</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jost:wght@300;400;500;600;700;800&family=Libre+Franklin:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/app.css?v=erben1">
+<link rel="stylesheet" href="css/extra.css?v=erben1">
+</head>
+<body>
+
+<nav class="sibra-nav">
+  <a class="nav-brand" href="https://erbenbauen.com.ar/" aria-label="Erben Bauen">
+    <img src="assets/erben-bauen.svg" alt="Erben Bauen">
+    <span class="nav-sep"></span>
+    <span class="nav-app">Presupuest<strong>App</strong></span>
+  </a>
+  <div class="nav-acciones">
+    <a class="nav-link" href="https://erbenbauen.com.ar/">Erben Bauen</a>
+    <a class="nav-link marcado" href="https://erbenbauen.com.ar/#contacto">Contacto</a>
+  </div>
+</nav>
+
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow">Cómputo · Presupuesto · Materiales</div>
+      <h1 class="hero-title">Presupuestá tu obra con <span>análisis unitarios reales</span></h1>
+      <p class="hero-desc">Subí tu cómputo, elegí las tareas y mirá el precio salir de los insumos, uno por uno.
+        Los análisis y los precios son los que usamos nosotros. Si conseguís el cemento más barato,
+        cargá tu lista: el precio tuyo manda y todo se recalcula solo.</p>
+      <div class="flex-row mt8" style="gap:10px">
+        <div id="vigencia-chip" class="chip">catálogo: sin cargar</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ LA OBRA ══════════════════ -->
+<div class="obra-barra">
+  <div class="obra-barra-inner">
+    <label class="obra-barra-label" for="obra-selector">Obra</label>
+    <select id="obra-selector"></select>
+    <button class="btn btn-secondary btn-chico" id="obra-nueva" type="button">＋ Obra nueva</button>
+    <button class="btn btn-secondary btn-chico" id="obra-mis-obras" type="button">Mis obras</button>
+    <label class="btn btn-secondary btn-chico" for="obra-abrir-archivo">Abrir obra</label>
+    <input type="file" id="obra-abrir-archivo" accept=".presuapp,.json" hidden>
+    <button class="btn btn-primary btn-chico" id="obra-guardar" type="button">Guardar obra (por mail)</button>
+    <div class="spacer"></div>
+    <span class="chip" id="obra-estado"></span>
+    <button class="link-datos" id="obra-mis-datos" type="button" title="Tus datos" hidden></button>
+  </div>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="computo">Cómputo</button>
+  <button class="tab" data-tab="presupuesto">Presupuesto</button>
+  <button class="tab" data-tab="precios">Precios</button>
+  <button class="tab" data-tab="materiales">Materiales</button>
+  <button class="tab" data-tab="plan">Plan de trabajo</button>
+  <button class="tab" data-tab="control-obra">Control de obra</button>
+  <button class="tab" data-tab="control">Catálogo</button>
+</div>
+
+<!-- ══════════════════ CÓMPUTO ══════════════════ -->
+<div class="section active" id="tab-computo">
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">CÓMPUTO DE LA OBRA</div>
+      <div class="spacer"></div>
+      <span class="badge" id="computo-count">0 renglones</span>
+    </div>
+    <p class="text-muted mb8">La cantidad de cada tarea es <strong>tu cómputo</strong>. Subilo desde Excel o cargalo acá;
+      todo se puede editar después. El mismo ítem en dos sectores son dos renglones: no se funden.</p>
+    <div class="flex-row">
+      <button class="btn btn-primary btn-grande" id="btn-buscar-tarea">＋ Elegir tareas de la base</button>
+      <label class="btn btn-secondary" for="file-computo">Subir cómputo (Excel)</label>
+      <input type="file" id="file-computo" accept=".xlsx,.xls,.csv" hidden>
+      <button class="btn btn-secondary" id="btn-plantilla">Bajar plantilla</button>
+      <div class="spacer"></div>
+      <button class="btn btn-danger" id="btn-limpiar-computo">Limpiar</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div id="computo-grilla">
+      <div class="empty-state">
+        Subí tu cómputo o agregá tareas del catálogo
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════ PRESUPUESTO ══════════════════ -->
+<div class="section" id="tab-presupuesto">
+  <div class="obra-header-grid">
+    <div class="obra-field">
+      <label>Nombre de la obra</label>
+      <input type="text" id="obra-nombre" placeholder="Ej: Galpón industrial Ruta 34">
+    </div>
+    <div class="obra-field">
+      <label>Comitente</label>
+      <input type="text" id="obra-cliente" placeholder="Cliente / Empresa">
+    </div>
+    <div class="obra-field">
+      <label>Ubicación</label>
+      <input type="text" id="obra-ubicacion" placeholder="Ciudad, provincia">
+    </div>
+    <div class="obra-field">
+      <label>Fecha</label>
+      <input type="date" id="obra-fecha">
+    </div>
+  </div>
+
+  <div class="budget-bottom-grid">
+    <div class="card">
+      <div class="card-title">RESUMEN POR RUBRO</div>
+      <div id="rubro-lista">
+        <div class="empty-state" style="padding:20px 0">Sin ítems aún</div>
+      </div>
+      <div class="rubro-summary-total" id="rubro-total-fila" style="display:none">
+        <span>COSTO DE OBRA</span><span id="rubro-total">$0</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-title">COEFICIENTE K</div>
+      <p class="text-muted mb8" style="font-size:11px">El K lleva del costo al precio y <strong>va sin IVA</strong>.
+        El IVA se calcula al final, sobre costo × K.</p>
+      <div class="param-row"><label>Gastos generales (%)</label><input type="number" class="k-input" id="k-gg" value="12" step="0.1"></div>
+      <div class="param-row"><label>Beneficio (%)</label><input type="number" class="k-input" id="k-beneficio" value="10" step="0.1"></div>
+      <div class="param-row"><label>Ingresos brutos (%)</label><input type="number" class="k-input" id="k-iibb" value="0" step="0.1"></div>
+      <div class="param-row"><label>Financiación (%)</label><input type="number" class="k-input" id="k-financiacion" value="0" step="0.1"></div>
+      <div class="param-row">
+        <label>Modo</label>
+        <select id="k-modo" class="k-input" style="width:auto">
+          <option value="aditivo">Aditivo (suma)</option>
+          <option value="cascada">En cascada (producto)</option>
+        </select>
+      </div>
+      <div class="k-resultado">K = <strong id="k-valor">1,2200</strong> <span id="k-formula" class="text-muted"></span></div>
+      <div class="param-row" style="margin-top:10px"><label>IVA (%)</label><input type="number" class="k-input" id="k-iva" value="21" step="0.5"></div>
+    </div>
+  </div>
+
+  <div class="resumen-general-bar">
+    <div class="rg-block"><div class="rg-label">COSTO</div><div class="rg-value" id="rg-costo">$0,00</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block"><div class="rg-label">RECARGO <span id="rg-k-label">K 1,22</span></div><div class="rg-value" id="rg-recargo">$0,00</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block"><div class="rg-label">PRECIO SIN IVA</div><div class="rg-value" id="rg-sin-iva">$0,00</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block"><div class="rg-label">IVA <span id="rg-iva-label">21%</span></div><div class="rg-value" id="rg-iva">$0,00</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block rg-total-block"><div class="rg-label">TOTAL</div><div class="rg-value rg-total" id="rg-total">$0,00</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">INCIDENCIA SOBRE EL COSTO</div>
+    <div id="incidencia-barra" class="incidencia"></div>
+    <div class="incidencia-leyenda">
+      <span><span class="rubro-punto" style="background:#0066cc;display:inline-block"></span> Materiales <strong id="inc-mat">—</strong></span>
+      <span><span class="rubro-punto" style="background:#1a7a3a;display:inline-block"></span> Mano de obra <strong id="inc-mo">—</strong></span>
+      <span><span class="rubro-punto" style="background:#e67e00;display:inline-block"></span> Equipos <strong id="inc-eq">—</strong></span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">PLANILLA DE PRESUPUESTO</div>
+      <div class="spacer"></div>
+      <label class="chk"><input type="checkbox" id="chk-precio-venta"> mostrar precio de venta (costo × K)</label>
+    </div>
+    <div id="presupuesto-tabla"><div class="empty-state">Sin ítems</div></div>
+  </div>
+
+  <div class="flex-row" style="margin-top:12px">
+    <button class="btn btn-success" id="btn-export-excel">Exportar Excel</button>
+    <button class="btn btn-secondary" id="btn-export-pdf">Imprimir / PDF</button>
+    <button class="btn btn-secondary" id="btn-guardar-json">Guardar obra (por mail)</button>
+    <label class="btn btn-secondary" for="file-proyecto">Abrir obra</label>
+    <input type="file" id="file-proyecto" accept=".presuapp,.json" hidden>
+  </div>
+</div>
+
+<!-- ══════════════════ PRECIOS ══════════════════ -->
+<div class="section" id="tab-precios">
+  <div class="card">
+    <div class="card-title">MI LISTA DE PRECIOS</div>
+    <p class="text-muted mb8">Los precios de Erben Bauen son el punto de partida. Si conseguís algo más barato,
+      cargá el tuyo: <strong>el tuyo manda</strong> y todos los análisis se recalculan solos.</p>
+    <div class="flex-row">
+      <label class="btn btn-primary" for="file-precios">Subir mi lista</label>
+      <input type="file" id="file-precios" accept=".xlsx,.xls,.csv" hidden>
+      <button class="btn btn-secondary" id="btn-plantilla-precios">Bajar plantilla</button>
+      <div class="spacer"></div>
+      <span class="badge" id="override-count">0 precios propios</span>
+      <button class="btn btn-danger" id="btn-limpiar-overrides">Volver a los de Erben Bauen</button>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <input type="text" id="buscar-insumo" placeholder="Buscar insumo por código o descripción…" style="margin:0">
+      <select id="filtro-categoria" style="width:auto;margin:0">
+        <option value="">Todas las categorías</option>
+        <option>Materiales</option>
+        <option>Mano de obra</option>
+        <option>Equipos</option>
+      </select>
+      <span class="badge" id="insumo-count">0</span>
+    </div>
+    <div id="insumo-lista"></div>
+    <div id="insumo-mas" class="text-muted" style="text-align:center;padding:10px"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ MATERIALES ══════════════════ -->
+<div class="section" id="tab-materiales">
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">INSUMOS QUE PIDE LA OBRA</div>
+      <div class="spacer"></div>
+      <span class="badge" id="materiales-count">0</span>
+    </div>
+    <p class="text-muted mb8">Cantidad = rendimiento del análisis × tu cómputo. Es la lista de compras de la obra.</p>
+    <div class="flex-row">
+      <select id="mat-categoria" style="width:auto;margin:0">
+        <option value="">Todo</option>
+        <option>Materiales</option>
+        <option>Mano de obra</option>
+        <option>Equipos</option>
+      </select>
+      <input type="text" id="buscar-material" placeholder="Buscar…" style="margin:0">
+      <div class="spacer"></div>
+      <button class="btn btn-primary" id="btn-formato-precios">Bajar formato para pedir precios</button>
+      <button class="btn btn-secondary" id="btn-export-materiales">Exportar lista</button>
+      <button class="btn btn-secondary" id="btn-historial">Historial de precios</button>
+    </div>
+  </div>
+  <div class="card"><div id="materiales-tabla"><div class="empty-state">Cargá el cómputo primero</div></div></div>
+</div>
+
+
+<!-- ══════════════════ PLAN DE TRABAJO ══════════════════ -->
+<div class="section" id="tab-plan">
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">CÓMO SE ARMA EL PLAN</div>
+      <div class="spacer"></div>
+      <span class="badge" id="plan-resumen">—</span>
+    </div>
+    <p class="text-muted mb8">Dos caminos para el mismo plan. Con <strong>predecesoras</strong> las fechas
+      salen solas del rendimiento diario y de qué va después de qué. Con el <strong>gantt rápido</strong> no
+      declarás dependencias: ponés a mano el avance de cada tarea mes a mes.</p>
+
+    <div class="plan-config">
+      <div class="obra-field">
+        <label>Modo</label>
+        <select id="plan-modo">
+          <option value="calculado">Calculado (predecesoras)</option>
+          <option value="rapido">Gantt rápido (avances a mano)</option>
+        </select>
+      </div>
+      <div class="obra-field">
+        <label>Inicio de obra</label>
+        <input type="date" id="plan-inicio">
+      </div>
+      <div class="obra-field">
+        <label>Ritmo</label>
+        <select id="plan-baseline">
+          <option value="cliente">Cliente (el plazo que se firma)</option>
+          <option value="empresa">Empresa (con el que se trabaja)</option>
+        </select>
+      </div>
+      <div class="obra-field" id="plan-campo-meses" hidden>
+        <label>Meses de obra</label>
+        <input type="number" id="plan-meses" min="1" max="60" value="6">
+      </div>
+      <div class="obra-field">
+        <label>Jornada (h)</label>
+        <input type="number" id="plan-jornada" min="1" max="12" step="0.5" value="8">
+      </div>
+      <div class="obra-field">
+        <label>Ritmo empresa (× cliente)</label>
+        <input type="number" id="plan-factor" min="1" max="3" step="0.05" value="1.3"
+               title="La empresa se arma el plan más rápido que el que firma con el cliente, para tener colchón">
+      </div>
+      <div class="obra-field">
+        <label>Oficiales por cuadrilla</label>
+        <input type="number" id="plan-frente" min="1" max="20" value="2"
+               title="La cuadrilla es 2 oficiales y 1 ayudante. El ritmo lo marcan los oficiales.">
+      </div>
+      <div class="obra-field">
+        <label>Días laborables</label>
+        <div class="flex-row" style="gap:14px;padding-top:6px">
+          <label class="chk"><input type="checkbox" id="plan-sabado"> sábado</label>
+          <label class="chk"><input type="checkbox" id="plan-domingo"> domingo</label>
+        </div>
+      </div>
+    </div>
+    <div id="plan-avisos"></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">CALENDARIO · FERIADOS QUE SE ESTÁN USANDO</div>
+      <div class="spacer"></div>
+      <span class="badge" id="feriados-cuenta">—</span>
+      <button class="btn btn-secondary" id="feriados-ver">Ver / editar</button>
+    </div>
+    <p class="text-muted">Los días que no se trabajan salen del plazo de obra. Los nacionales se
+      calculan solos —Carnaval y Viernes Santo incluidos, y los trasladables movidos como manda la
+      ley—, pero <strong>los puentes turísticos salen por decreto cada año</strong> y los
+      provinciales, municipales y los de la obra hay que cargarlos. Acá se ve cuáles se están usando.</p>
+    <div id="feriados-resumen"></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">TAREAS, RITMO Y DEPENDENCIAS</div>
+      <div class="spacer"></div>
+      <span class="text-muted" id="plan-ayuda-modo"></span>
+      <button class="btn btn-primary" id="plan-proponer">Armar el plan solo</button>
+    </div>
+    <div id="plan-tabla"><div class="empty-state">Cargá el cómputo primero: el plan se arma sobre esas tareas</div></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">GANTT POR MES</div>
+      <div class="spacer"></div>
+      <label class="chk"><input type="checkbox" id="plan-solo-criticas"> sólo la ruta crítica</label>
+    </div>
+    <div id="plan-gantt"></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">LOOK AHEAD · PRÓXIMAS SEMANAS</div>
+      <div class="spacer"></div>
+      <div class="obra-field" style="flex-direction:row;align-items:center;gap:8px">
+        <label style="margin:0">desde</label>
+        <input type="date" id="plan-la-desde" style="width:auto">
+        <label style="margin:0">semanas</label>
+        <input type="number" id="plan-la-semanas" min="2" max="12" value="4" style="width:70px">
+      </div>
+    </div>
+    <div id="plan-lookahead"></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">MATERIALES POR MES</div>
+      <div class="spacer"></div>
+      <select id="plan-mat-categoria" style="width:auto;margin:0">
+        <option value="">Todo</option>
+        <option value="Materiales">Materiales</option>
+        <option value="Mano de obra">Mano de obra</option>
+        <option value="Equipos">Equipos</option>
+      </select>
+      <button class="btn btn-secondary" id="plan-export">Exportar el plan</button>
+      <button class="btn btn-secondary" id="plan-pdf">Imprimir / PDF</button>
+    </div>
+    <p class="text-muted mb8">La lista de compras abierta mes a mes. El pedido se redondea
+      <strong>en cada mes</strong>: si en marzo hacen falta 26 kg de cemento y en abril 30, son dos bolsas
+      y dos bolsas, no las tres que saldrían de sumar primero.</p>
+    <div id="plan-materiales"></div>
+  </div>
+
+</div>
+
+<!-- ══════════════════ CONTROL DE OBRA ══════════════════ -->
+<div class="section" id="tab-control-obra">
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">FECHA DE CORTE</div>
+      <div class="spacer"></div>
+      <span class="badge" id="ctl-cortes-cuenta">—</span>
+    </div>
+    <p class="text-muted mb8">Todo se mide <strong>a un día</strong>. Cada corte guarda el avance de cada tarea
+      a esa fecha, y quedan todos: el historial es lo que después arma la curva real. Un corte nuevo arranca
+      con los avances del anterior, así sólo cambiás lo que se movió.</p>
+    <div class="plan-config">
+      <div class="obra-field">
+        <label>Corte que estás mirando</label>
+        <select id="ctl-corte"></select>
+      </div>
+      <div class="obra-field">
+        <label>Nuevo corte al</label>
+        <div class="flex-row" style="gap:6px;flex-wrap:nowrap">
+          <input type="date" id="ctl-nuevo-fecha" style="margin:0">
+          <button class="btn btn-primary" id="ctl-nuevo">Crear</button>
+        </div>
+      </div>
+      <div class="obra-field">
+        <label>Tolerancia adelanto (puntos)</label>
+        <input type="number" id="ctl-tol-adel" min="0" max="50" step="1">
+      </div>
+      <div class="obra-field">
+        <label>Tolerancia atraso (puntos)</label>
+        <input type="number" id="ctl-tol-atr" min="0" max="50" step="1">
+      </div>
+      <div class="obra-field">
+        <label>&nbsp;</label>
+        <button class="btn btn-secondary" id="ctl-borrar-corte">Borrar este corte</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="resumen-general-bar" id="ctl-resumen">
+    <div class="rg-block"><div class="rg-label">INICIO REAL</div><div class="rg-value" id="ctl-ini-real">—</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block"><div class="rg-label">FIN CLIENTE</div><div class="rg-value" id="ctl-fin-cliente">—</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block"><div class="rg-label">FIN EMPRESA</div><div class="rg-value" id="ctl-fin-empresa">—</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block"><div class="rg-label">FIN ESPERADO</div><div class="rg-value" id="ctl-fin-esperado">—</div></div>
+    <div class="rg-sep"></div>
+    <div class="rg-block rg-total-block"><div class="rg-label">DESVÍO VS CLIENTE</div><div class="rg-value rg-total" id="ctl-desvio">—</div></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">AVANCE REAL · TAREA POR TAREA</div>
+      <div class="spacer"></div>
+      <span class="text-muted" id="ctl-cuenta"></span>
+    </div>
+    <p class="text-muted mb8">Cargá cuándo arrancó cada tarea y cuánto lleva al corte. El <strong>fin
+      esperado</strong> sale del ritmo que viene: si lleva 10 días hábiles y va por el 40%, dura 25.
+      Cuando termina, poné la fecha real de fin y esa manda. El avance esperado es lo que el plan dice que
+      tendría que llevar a esta fecha, contra el ritmo del cliente y contra el de la empresa.</p>
+    <div id="ctl-tabla"><div class="empty-state">Armá el plan de trabajo primero: el control se mide contra él</div></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">CURVAS: CLIENTE, EMPRESA, REAL Y PROYECCIÓN</div>
+    <p class="text-muted mb8">En plata: la del <strong>cliente</strong> va a precio (costo × K, sin IVA), que es lo que se certifica, y termina en el precio de la obra; la de la <strong>empresa</strong> va a costo, con su ritmo interno más rápido. La real y la proyectada van a costo, contra la de la empresa. La <strong>real</strong> une el
+      avance de cada corte, <strong>llena</strong>; desde el corte que estás mirando sale la
+      <strong>proyectada</strong>, <strong>punteada</strong>: las tareas en marcha al ritmo que traen y las que
+      no arrancaron cuando terminen las que las preceden.</p>
+    <div id="ctl-curvas"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">HISTORIAL DE AVANCES</div>
+    <p class="text-muted mb8">El avance de cada tarea en cada corte. Es lo que se guarda en el proyecto.</p>
+    <div id="ctl-historial"></div>
+  </div>
+
+  <div class="card">
+    <div class="flex-row mb8">
+      <div class="card-title" style="margin:0">GUARDAR Y SEGUIR DESPUÉS</div>
+      <div class="spacer"></div>
+      <button class="btn btn-primary" id="plan-guardar">Bajar el proyecto</button>
+      <label class="btn btn-secondary" for="plan-abrir">Subir un proyecto</label>
+      <input type="file" id="plan-abrir" accept=".json" hidden>
+    </div>
+    <p class="text-muted">Se baja <strong>todo</strong> en un archivo: el cómputo, tus precios, el K,
+      los rendimientos, las predecesoras, el calendario, los inicios y fines reales y el historial de
+      cortes. El mes que viene lo subís, creás el corte nuevo y seguís donde quedaste.</p>
+  </div>
+
+</div>
+
+<!-- ══════════════════ CONTROL ══════════════════ -->
+<div class="section" id="tab-control">
+  <div class="card">
+    <div class="card-title">CONTROL DE COHERENCIA DEL CATÁLOGO</div>
+    <p class="text-muted mb8">Un Excel de costos trae los análisis <strong>congelados</strong>: los subtotales se
+      calcularon con la lista de precios de aquel día. Si después se tocó la hoja de precios y no se recalculó,
+      la receta y la lista dejan de coincidir. Acá se ve, en vez de quedar escondido.</p>
+    <div id="control-resumen" class="control-kpis"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">INSUMOS DESALINEADOS</div>
+    <div id="control-desalineados"></div>
+  </div>
+  <div class="card">
+    <div class="card-title">TAREAS CUYO PRECIO CAMBIA AL RECALCULAR</div>
+    <div id="control-tareas"></div>
+  </div>
+</div>
+
+<!-- ══════════════════ MODALES ══════════════════ -->
+<div class="modal-overlay" id="modal-buscar">
+  <div class="modal" style="max-width:860px">
+    <div class="modal-title">Agregar tarea al cómputo</div>
+    <input type="text" id="buscar-tarea" placeholder="Buscar por código, descripción o rubro…">
+    <div id="tarea-resultados" class="lista-scroll"></div>
+    <div class="flex-row" style="margin-top:10px"><div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-buscar">Cerrar</button></div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-mapeo">
+  <div class="modal" style="max-width:760px">
+    <div class="modal-title">¿Qué columna es cada cosa?</div>
+    <p class="text-muted mb8" id="mapeo-info"></p>
+    <div id="mapeo-campos"></div>
+    <div id="mapeo-preview" class="mapeo-preview"></div>
+    <div class="flex-row" style="margin-top:12px">
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-mapeo">Cancelar</button>
+      <button class="btn btn-primary" id="btn-mapeo-confirmar">Importar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-analisis">
+  <div class="modal" style="max-width:860px">
+    <div class="modal-title" id="analisis-titulo">Análisis</div>
+    <div id="analisis-cuerpo"></div>
+    <div class="flex-row" style="margin-top:10px"><div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-analisis">Cerrar</button></div>
+  </div>
+</div>
+
+<!-- ══════════════════ OBRAS Y DATOS ══════════════════ -->
+<div class="modal-overlay" id="modal-datos">
+  <div class="modal" style="max-width:480px">
+    <div class="modal-title" id="datos-titulo">Te mandamos la obra a tu mail</div>
+    <p class="text-muted mb8" id="datos-texto"></p>
+    <div class="obra-field" id="datos-obra-fila"><label for="datos-obra">Nombre de la obra *</label>
+      <input type="text" id="datos-obra" placeholder="Ej: Galpón industrial Ruta 34"></div>
+    <div id="datos-ya" class="datos-ya" hidden>Te la mandamos a <strong id="datos-ya-email"></strong>
+      · <button class="link-datos" id="datos-cambiar" type="button">no soy yo / cambiar</button></div>
+    <div id="datos-campos">
+      <div class="datos-dos">
+        <div class="obra-field"><label for="datos-nombre">Nombre *</label>
+          <input type="text" id="datos-nombre" autocomplete="given-name"></div>
+        <div class="obra-field"><label for="datos-apellido">Apellido *</label>
+          <input type="text" id="datos-apellido" autocomplete="family-name"></div>
+      </div>
+      <div class="obra-field"><label for="datos-telefono">Teléfono *</label>
+        <input type="tel" id="datos-telefono" placeholder="Ej: 11 1234-5678" autocomplete="tel"></div>
+      <div class="obra-field"><label for="datos-email">Email *</label>
+        <input type="email" id="datos-email" placeholder="vos@ejemplo.com" autocomplete="email"></div>
+    </div>
+    <div class="flex-row" style="margin-top:14px">
+      <button class="btn btn-secondary" id="datos-bajar-igual" type="button" hidden>Bajarla a mi disco</button>
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-datos" type="button">Ahora no</button>
+      <button class="btn btn-primary" id="btn-datos-confirmar" type="button">Mandármela por mail</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-enviado">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-title">Listo, va en camino</div>
+    <p class="mb8">En unos minutos te llega <strong id="enviado-obra"></strong> a <strong id="enviado-email"></strong>.
+      Si no la ves, revisá el correo no deseado.</p>
+    <p class="text-muted mb8">Para seguir otro día, en cualquier compu: «Abrir obra» y elegís el archivo del mail.</p>
+    <p class="mb8"><strong>¿Querés también bajarla a tu disco?</strong></p>
+    <div class="flex-row" style="margin-top:14px">
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-enviado" type="button">No, gracias</button>
+      <button class="btn btn-primary" id="enviado-bajar" type="button">Sí, bajarla</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-obra-nueva">
+  <div class="modal" style="max-width:460px">
+    <div class="modal-title">Obra nueva</div>
+    <p class="text-muted mb8">Queda en este navegador. Cuando quieras, «Guardar obra» te la manda por mail.</p>
+    <div class="obra-field"><label for="nueva-nombre">Nombre de la obra *</label>
+      <input type="text" id="nueva-nombre" placeholder="Ej: Galpón industrial Ruta 34"></div>
+    <div class="obra-field"><label for="nueva-cliente">Comitente</label>
+      <input type="text" id="nueva-cliente" placeholder="Cliente / Empresa"></div>
+    <div class="obra-field"><label for="nueva-ubicacion">Ubicación</label>
+      <input type="text" id="nueva-ubicacion" placeholder="Ciudad, provincia"></div>
+    <div class="flex-row" style="margin-top:14px">
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-obra-nueva" type="button">Cancelar</button>
+      <button class="btn btn-primary" id="btn-nueva-crear" type="button">Crear la obra</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-obras">
+  <div class="modal" style="max-width:820px">
+    <div class="flex-row mb8">
+      <div class="modal-title" style="margin:0">Mis obras (en este navegador)</div>
+      <div class="spacer"></div>
+      <button class="btn btn-primary btn-chico" id="obras-nueva" type="button">＋ Obra nueva</button>
+    </div>
+    <div id="obras-lista"></div>
+    <div class="flex-row" style="margin-top:14px">
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-obras" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-historial">
+  <div class="modal" style="max-width:980px">
+    <div class="modal-title">Historial de precios de esta obra</div>
+    <p class="text-muted mb8">Cada precio que usó la obra, con la fecha en que lo usó. Cuando los precios se actualizan,
+      lo anterior no se pierde: queda acá. Pasá el mouse por un renglón para ver todos sus cambios.</p>
+    <div class="flex-row mb8">
+      <button class="btn btn-primary btn-chico" id="hist-ver-insumos" type="button">Insumos</button>
+      <button class="btn btn-secondary btn-chico" id="hist-ver-tareas" type="button">Tareas</button>
+      <div class="spacer"></div>
+      <button class="btn btn-success btn-chico" id="hist-excel" type="button">Excel</button>
+      <button class="btn btn-secondary btn-chico" id="hist-pdf" type="button">PDF</button>
+    </div>
+    <div id="hist-tabla"></div>
+    <div class="flex-row" style="margin-top:14px">
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-historial" type="button">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div class="aviso-drive" id="aviso-mail" role="dialog" aria-labelledby="aviso-mail-titulo" hidden>
+  <div class="aviso-drive-titulo" id="aviso-mail-titulo">¿Te mandamos la obra a tu mail?</div>
+  <p>Hoy queda sólo en este navegador. Por mail la tenés guardada y la abrís desde cualquier compu.</p>
+  <div class="flex-row">
+    <button class="btn btn-secondary btn-chico" id="aviso-mail-no" type="button">No, gracias</button>
+    <div class="spacer"></div>
+    <button class="btn btn-primary btn-chico" id="aviso-mail-si" type="button">Sí, mandámela</button>
+  </div>
+</div>
+
+<footer class="sibra-footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <img src="assets/erben-bauen-dark.svg" alt="Erben Bauen">
+    </div>
+    <div class="footer-texto">
+      PresupuestApp es de uso libre. Los análisis unitarios y los precios son los de
+      Erben Bauen y se actualizan con nuestras compras; un presupuesto hecho acá
+      es una referencia, no una oferta.
+      <br><a href="https://erbenbauen.com.ar/">erbenbauen.com.ar</a>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="modal-pred">
+  <div class="modal" style="max-width:720px">
+    <div class="modal-title" id="pred-titulo">¿Después de qué va esta tarea?</div>
+    <p class="text-muted mb8">Marcá las tareas que tienen que estar terminadas antes de que ésta empiece.
+      Si no marcás ninguna, arranca con la obra.</p>
+    <input type="text" id="pred-buscar" placeholder="Filtrar por código o descripción…">
+    <div id="pred-lista" class="lista-scroll"></div>
+    <div class="flex-row" style="margin-top:12px">
+      <span class="text-muted" id="pred-cuenta"></span>
+      <div class="spacer"></div>
+      <button class="btn btn-secondary" id="pred-ninguna">Arranca con la obra</button>
+      <button class="btn btn-primary" data-cerrar="modal-pred">Listo</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="modal-feriados">
+  <div class="modal" style="max-width:640px">
+    <div class="modal-title">Feriados del período de obra</div>
+    <p class="text-muted mb8">Destildá el que en tu obra sí se trabaja. Agregá los provinciales,
+      los municipales, los puentes turísticos del decreto y los de la obra.</p>
+    <div class="flex-row mb8">
+      <input type="date" id="feriado-fecha" style="width:auto;margin:0">
+      <input type="text" id="feriado-nombre" placeholder="Por qué no se trabaja" style="margin:0">
+      <button class="btn btn-primary" id="feriado-agregar">Agregar</button>
+    </div>
+    <div id="feriados-lista" class="lista-scroll"></div>
+    <div class="flex-row" style="margin-top:12px"><div class="spacer"></div>
+      <button class="btn btn-secondary" data-cerrar="modal-feriados">Listo</button></div>
+  </div>
+</div>
+
+<div id="toast-zona"></div>
+
+<script src="vendor/xlsx.full.min.js?v=20261002135040"></script>
+<script>window.PRESUAPP_REMOTO = true;</script>
+<script src="js/motor.js?v=20261002135040"></script>
+<script src="js/datos.js?v=20261002135040"></script>
+<script src="js/importar.js?v=20261002135040"></script>
+<script src="js/app.js?v=20261002135040"></script>
+<script src="js/malla.js?v=20261002135040"></script>
+<script src="js/plan.js?v=20261002135040"></script>
+<script src="js/control.js?v=20261002135040"></script>
+<script src="js/planui.js?v=20261002135040"></script>
+<script src="js/imprimir.js?v=20261002135040"></script>
+<script src="js/contacto.js?v=20261002135040"></script>
+<script src="js/obras.js?v=20261002135040"></script>
+</body>
+</html>
