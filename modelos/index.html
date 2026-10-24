@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Costos de modelos tipo · Erben Bauen</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Jost:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 :root {
   color-scheme: light dark;
   --bg: #eff2f5; --surface: #fff; --surface-2: #e7ecf0; --ink: #12202b; --muted: #566775; --line: #d5dce2;
   --band: #05233D; --band-ink: #fff; --mo: #05233D; --mat: #9E6D29; --eq: #2f7d57; --ot: #7a8a96;
   --up: #b42318; --down: #2f7d57;
-  --display: "Barlow Condensed", "Arial Narrow", sans-serif; --body: "Barlow", system-ui, sans-serif; --num: "IBM Plex Mono", ui-monospace, monospace;
+  --display: "Jost", "Century Gothic", sans-serif; --body: "Jost", "Century Gothic", system-ui, sans-serif; --num: "IBM Plex Mono", ui-monospace, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root { --bg: #0e1920; --surface: #15232c; --surface-2: #1c2d38; --ink: #e5ecf1; --muted: #93a5b2; --line: #284050; --band: #0b3556;
@@ -21,13 +21,13 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: var(--bg); color: var(--ink); font: 16px/1.5 var(--body); padding-inline: 16px; }
 .wrap { max-width: 1060px; margin-inline: auto; padding-block: 16px 64px; }
-.top { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 1px solid var(--line); margin-inline: -16px; padding: 10px 16px; }
+.top { position: sticky; top: 0; z-index: 5; background: #05233D; border-bottom: 0; margin-inline: -16px; padding: 10px 16px; }
 .top-in { max-width: 1060px; margin-inline: auto; display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: center; justify-content: space-between; }
-.brand { font: 700 18px var(--display); letter-spacing: .12em; text-transform: uppercase; }
-.brand span { color: var(--muted); font-weight: 500; }
+.brand { display: flex; align-items: center; gap: 14px; font: 600 14px var(--display); letter-spacing: .14em; text-transform: uppercase; color: #F6F5F1; text-decoration: none; } .brand img { height: 36px; width: auto; display: block; }
+.brand span { color: #9AA3AC; font-weight: 500; }
 .nav { display: flex; gap: 4px 16px; flex-wrap: wrap; font-size: 14px; }
-.nav a { color: var(--muted); text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
-.nav a:hover { color: var(--ink); border-color: var(--mo); }
+.nav a { color: #F6F5F1; text-decoration: none; padding: 4px 0; border-bottom: 2px solid transparent; }
+.nav a:hover { color: #fff; border-color: #9E6D29; }
 .mods { display: flex; gap: 8px; margin: 18px 0 4px; flex-wrap: wrap; }
 .mod { font: 600 15px var(--display); letter-spacing: .08em; padding: 9px 14px; border: 1px solid var(--line); border-radius: 3px; color: var(--muted); background: transparent; cursor: pointer; }
 .mod[aria-selected="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
@@ -123,7 +123,7 @@ details.ru summary span.n { color: var(--muted); font-weight: 500; }
 <body>
 <div class="wrap">
   <div class="top"><div class="top-in">
-    <div class="brand">Erben Bauen <span>· Costos de modelos tipo</span></div>
+    <a class="brand" href="https://erbenbauen.com.ar/" aria-label="Erben Bauen: volver a la página principal"><img src="../presuapp/assets/erben-bauen-dark.svg" alt="Erben Bauen"><span>· Costos de modelos tipo</span></a>
     <nav class="nav" aria-label="Secciones"><a href="#variacion">Variación</a><a href="#modelo">Costo del modelo</a><a href="#evolucion">Evolución</a><a href="#materiales">Materiales</a><a href="#metodo">Método</a></nav>
   </div></div>
   <div class="mods" role="tablist" id="mods" aria-label="Modelos"></div>
