@@ -1,0 +1,119 @@
+/* ───────────────────────────────────────────────────────────────────────────
+   erben.css — capa de marca compartida (PresupuestApp, Índices, Modelos).
+   Fuente de las reglas: "Prompt para IA - Interfaces Erben Bauen" (manual de marca).
+   Se carga la ÚLTIMA en cada página y pisa lo heredado de SIBRATECH.
+   Si cambia la marca, se cambia acá.
+   ─────────────────────────────────────────────────────────────────────────── */
+:root {
+  --eb-navy: #05233D;  --eb-navy-85: #2A445A;
+  --eb-text: #494D50;  --eb-mid: #787C7F;   --eb-light: #D9D7D0;
+  --eb-line: #E3E1DB;  --eb-ivory: #F6F5F1; --eb-row: #FAF9F6;
+  --eb-gold: #9E6D29;  --eb-red: #8E2424;   --eb-white: #FFFFFF;
+  --eb-font: "Century Gothic", "Jost", "TeX Gyre Adventor", "URW Gothic", sans-serif;
+  --eb-ease: .25s cubic-bezier(.4, 0, .2, 1);
+  color-scheme: light;
+
+  /* nombres de PresupuestApp / Índices → marca */
+  --title: var(--eb-font); --sans: var(--eb-font);
+  --font-display: var(--eb-font); --font-body: var(--eb-font); --font-aux: var(--eb-font);
+  --red-500: var(--eb-navy); --red-600: var(--eb-navy-85); --red-700: var(--eb-navy); --red-050: var(--eb-ivory);
+  --red: var(--eb-navy); --red-dark: var(--eb-navy-85); --red-dim: var(--eb-ivory); --red-dim2: var(--eb-line);
+  --accent: var(--eb-navy); --accent2: var(--eb-navy); --danger: var(--eb-red); --aviso: var(--eb-gold); --success: var(--eb-navy);
+  --bg: var(--eb-white); --surface: var(--eb-white); --surface2: var(--eb-ivory);
+  --border: var(--eb-line); --border-fuerte: var(--eb-light); --border-hairline: var(--eb-line);
+  --text: var(--eb-text); --text-strong: var(--eb-navy); --text-body: var(--eb-text); --text-muted: var(--eb-mid); --muted: var(--eb-mid);
+  --ink-900: var(--eb-navy); --ink-800: var(--eb-navy); --black: var(--eb-navy); --ink: var(--eb-navy);
+  --gray-100: var(--eb-ivory); --gray-050: var(--eb-row); --gray-200: var(--eb-line); --gray-300: var(--eb-line);
+  --gray-400: var(--eb-mid); --gray-500: var(--eb-mid); --gray-600: var(--eb-text); --gray-700: var(--eb-text);
+  --green-600: var(--eb-navy); --green-050: var(--eb-ivory);
+  --radius: 0; --shadow-card: none; --shadow-hover: 0 8px 20px rgba(5, 35, 61, .12);
+
+  /* nombres de Modelos → marca (series: marino = dato real, grises = referencia) */
+  --display: var(--eb-font); --body: var(--eb-font); --num: var(--eb-font);
+  --band: var(--eb-navy); --band-ink: var(--eb-ivory);
+  --mo: var(--eb-navy); --mat: var(--eb-mid); --eq: var(--eb-light); --ot: #C9C7C1;
+  --up: var(--eb-navy); --down: var(--eb-mid);
+  --line: var(--eb-line); --surface-2: var(--eb-ivory);
+}
+
+/* tipografía: Jost/Century Gothic en todo, cifras tabulares */
+html body, html body * { font-family: var(--eb-font); }
+body { color: var(--eb-text); background: var(--eb-white); font-variant-numeric: tabular-nums; }
+h1, h2, h3, h4, h5, h6 { color: var(--eb-navy); }
+.band h1, .band h2, .band h3, .site-footer h1, .site-footer h2, .site-footer h3, .sibra-footer h3 { color: var(--eb-ivory) !important; }
+
+/* forma: radio cero, sin degradados */
+*, *::before, *::after { border-radius: 0 !important; }
+.dot, .soon-dot { border-radius: 50% !important; }
+.budget-header { background: var(--eb-ivory) !important; }
+
+/* navegación: barra navy, logo blanco, ítem activo con filete dorado */
+.sibra-nav, .site-nav { background: var(--eb-navy) !important; border-bottom: 0 !important; box-shadow: none !important; }
+.sibra-nav a, .site-nav a, .nav-links a, .nav-link { color: var(--eb-ivory) !important; font-size: 12px !important; font-weight: 700 !important;
+  letter-spacing: .14em !important; text-transform: uppercase; text-decoration: none; transition: color var(--eb-ease); }
+.sibra-nav a:hover, .site-nav a:hover, .nav-links a:hover, .nav-link:hover { color: var(--eb-gold) !important; background: transparent !important; }
+.nav-link.marcado, .nav-links a.active { background: transparent !important; border: 0 !important; border-bottom: 2px solid var(--eb-gold) !important; }
+.nav-app, .nav-app strong { color: var(--eb-ivory) !important; }
+.nav-sep { background: rgba(246, 245, 241, .45) !important; }
+.nav-toggle span { background: var(--eb-ivory) !important; }
+.nav-mobile { background: var(--eb-navy) !important; }
+.nav-mobile a { color: var(--eb-ivory) !important; border-color: rgba(246, 245, 241, .18) !important; }
+
+/* pie: navy, filete dorado arriba */
+.sibra-footer, .site-footer { background: var(--eb-navy) !important; border-top: 3px solid var(--eb-gold) !important; color: var(--eb-ivory); }
+.sibra-footer a, .site-footer a { color: var(--eb-ivory) !important; transition: color var(--eb-ease); }
+.sibra-footer a:hover, .site-footer a:hover { color: var(--eb-gold) !important; }
+.site-footer h5, .footer-col h5 { color: var(--eb-ivory) !important; letter-spacing: .2em; text-transform: uppercase; }
+.footer-texto, .footer-brand p, .footer-bottom, .footer-bottom span { color: #D7DBDE !important; }
+.swoosh-footer { display: none !important; }
+
+/* botones: rectángulo pleno, versalitas con tracking .14em; hover = navy al 85 % */
+.btn, .sbt-cta, button.btn, .g-btn, .mod { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; transition: background-color var(--eb-ease), color var(--eb-ease), border-color var(--eb-ease), transform var(--eb-ease), box-shadow var(--eb-ease); }
+.btn-primary, .btn-success, .sbt-cta { background: var(--eb-navy) !important; color: var(--eb-ivory) !important; border: 1px solid var(--eb-navy) !important; box-shadow: none !important; }
+.btn-primary:hover, .btn-success:hover, .sbt-cta:hover { background: var(--eb-navy-85) !important; border-color: var(--eb-navy-85) !important; transform: none; }
+.btn-secondary { background: var(--eb-white) !important; color: var(--eb-navy) !important; border: 1px solid var(--eb-navy) !important; }
+.btn-secondary:hover { background: var(--eb-ivory) !important; }
+.btn-danger { background: var(--eb-white) !important; color: var(--eb-red) !important; border: 1px solid var(--eb-red) !important; }
+.btn:active, .sbt-cta:active { transform: none; filter: brightness(.92); }
+
+/* pestañas: versalitas con tracking; activa con filete dorado */
+.tab, .tab-btn, .mod { font-weight: 700; letter-spacing: .14em; text-transform: uppercase; font-size: 12px; color: var(--eb-mid); transition: color var(--eb-ease), border-color var(--eb-ease); }
+.tab:hover, .tab-btn:hover:not(.active) { color: var(--eb-navy); }
+.tab.active, .tab-btn.active { color: var(--eb-navy) !important; border-bottom: 2px solid var(--eb-gold) !important; }
+.mod[aria-selected="true"] { background: var(--eb-navy); color: var(--eb-ivory); border-color: var(--eb-navy); }
+
+/* tarjetas: filete navy de 2 px arriba, borde hairline, sin sombra; sube 4 px en hover */
+.card, .datos-card, .analysis-item, .price-item { background: var(--eb-white); border: 1px solid var(--eb-line) !important; border-top: 2px solid var(--eb-navy) !important; box-shadow: none !important; transition: transform var(--eb-ease), box-shadow var(--eb-ease); }
+.analysis-item:hover, .price-item:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover) !important; }
+.card-title, .datos-card-head h2 { color: var(--eb-navy); letter-spacing: .14em; }
+
+/* campos: fondo blanco, borde hairline, foco navy de 2 px */
+input, select, textarea { background: var(--eb-white) !important; color: var(--eb-text); border: 1px solid var(--eb-line) !important; transition: border-color var(--eb-ease), box-shadow var(--eb-ease); }
+input:focus, select:focus, textarea:focus { border-color: var(--eb-navy) !important; box-shadow: 0 0 0 1px var(--eb-navy) !important; outline: none; }
+label { color: var(--eb-mid); text-transform: uppercase; letter-spacing: .1em; font-size: 12px; }
+
+/* tablas: encabezado navy con marfil en versalitas, filas alternas, sin bordes verticales */
+table th, .rt th { background: var(--eb-navy) !important; color: var(--eb-ivory) !important; font-size: 12px !important; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; border: 0 !important; }
+table td, .rt td { border-left: 0 !important; border-right: 0 !important; border-top: 1px solid var(--eb-line); font-variant-numeric: tabular-nums; }
+table tbody tr:nth-child(even) td, .rt tbody tr:nth-child(even) td { background: var(--eb-row); }
+.rt tr.sum td, .rt tr.pf td { background: var(--eb-ivory) !important; }
+
+/* etiquetas y chips: rectángulo pleno, versalitas */
+.chip, .badge, .badge-actualizado { text-transform: uppercase; letter-spacing: .1em; font-weight: 700; font-size: 11px; background: var(--eb-ivory); color: var(--eb-navy); border: 1px solid var(--eb-line); }
+.chip.ok { background: var(--eb-navy); color: var(--eb-ivory); border-color: var(--eb-navy); }
+.chip.error { background: var(--eb-red); color: var(--eb-white); border-color: var(--eb-red); }
+
+/* modelos: banda navy, números en navy */
+.band { background: var(--eb-navy); color: var(--eb-ivory); }
+.top { background: var(--eb-navy); }
+.big, .big.up, .big.down { color: var(--eb-navy); }
+.panel { background: var(--eb-white); border-color: var(--eb-line); }
+
+/* foco visible siempre: contorno dorado de 2 px separado 2 px */
+:focus-visible { outline: 2px solid var(--eb-gold) !important; outline-offset: 2px !important; }
+
+/* enlaces: pasan a dorado en hover */
+a { transition: color var(--eb-ease); }
+main a:hover, .hero-breadcrumb a:hover { color: var(--eb-gold); }
+
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
