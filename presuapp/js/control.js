@@ -387,6 +387,9 @@
     });
   }
 
+  var btnHist = document.getElementById('ctl-guardar-historial');
+  if (btnHist) btnHist.onclick = function () { var b = document.getElementById('obra-guardar'); if (b) b.click(); };
+
   window.ControlUI = { render: render, estado: function () { return ultimo; }, ctl: ctl, calcularCorte: calcularCorte };
   conectar();
 })();
